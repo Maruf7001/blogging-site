@@ -1,26 +1,40 @@
 import express from 'express';
 import 'dotenv/config';
-import cors from 'cors'
+import cors from 'cors';
+import connectDB from './configs/db.js';
+import adminRouter from './routes/adminRoutes.js';
+import blogRouter from './routes/blogRoutes.js';
 
 
 const app = express();
 
 
-//Middleware setup
+await connectDB()
+
+
+// Middlware setup
 
 app.use(express.json());
 app.use(cors());
 
 
-//Routes
+// Route Setup
 
-app.get('/', (req, res) => res.send('API is working') )
+app.get('/', (req, res) => res.send("API is connected successfully") );
+app.use('/api/admin', adminRouter)
+app.use('/api/blog', blogRouter)
+
+// Connect to Mongodb
+
 
 
 const PORT = process.env.PORT || 3000;
 
-app.listen(PORT, () => 
-
-    console.log("Server is running on PORT:" + PORT)
+app.listen(PORT, () => {
+    console.log("Server is running on PORT:" + PORT);
     
-);
+})
+
+
+
+export default app;
